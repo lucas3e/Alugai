@@ -1,0 +1,35 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=seu-host-postgres;Port=5432;Database=alugai_db;Username=seu-usuario;Password=sua-senha;SSL Mode=Require;"
+  },
+  "JwtSettings": {
+    "SecretKey": "sua-chave-secreta-super-segura-com-no-minimo-32-caracteres-para-producao",
+    "Issuer": "AluguelEquipamentosApi",
+    "Audience": "AluguelEquipamentosApp",
+    "ExpirationInMinutes": 1440
+  },
+  "MercadoPago": {
+    "AccessToken": "seu-access-token-producao",
+    "PublicKey": "sua-public-key-producao"
+  },
+  "Storage": {
+    "Type": "Azure",
+    "AzureBlobConnectionString": "sua-connection-string-azure",
+    "AzureBlobContainerName": "equipamentos"
+  },
+  "Email": {
+    "SmtpHost": "smtp.gmail.com",
+    "SmtpPort": 587,
+    "SmtpUsername": "seu-email@gmail.com",
+    "SmtpPassword": "sua-senha-de-app",
+    "FromEmail": "noreply@alugai.com",
+    "FromName": "Alugai"
+  }
+}
