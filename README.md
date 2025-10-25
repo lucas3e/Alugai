@@ -90,7 +90,7 @@ git --version
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/alugai-api.git
+git clone https://github.com/lucas3e/alugai-api.git
 cd alugai-api
 ```
 
