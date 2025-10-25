@@ -2,22 +2,6 @@
 
 API REST desenvolvida em **C# com ASP.NET Core 8.0** para um aplicativo MVP de aluguel de equipamentos entre vizinhos.
 
-## 📋 Índice
-
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Funcionalidades](#funcionalidades)
-- [Pré-requisitos](#pré-requisitos)
-- [Instalação e Configuração](#instalação-e-configuração)
-- [Executando o Projeto](#executando-o-projeto)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Endpoints da API](#endpoints-da-api)
-- [Configurações](#configurações)
-- [Migrations](#migrations)
-- [Testes](#testes)
-- [Deploy](#deploy)
-- [Contribuindo](#contribuindo)
-
 ## 🎯 Sobre o Projeto
 
 O **Alugai** é uma plataforma que conecta vizinhos para aluguel de equipamentos, ferramentas e outros itens. A API fornece todas as funcionalidades necessárias para:
