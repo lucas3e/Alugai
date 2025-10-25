@@ -5,7 +5,7 @@
 export const API_CONFIG = {
   // Altere para o IP da sua máquina se estiver testando em dispositivo físico
   // Exemplo: 'http://192.168.1.100:5000/api'
-  BASE_URL: 'http://localhost:5000/api',
+  BASE_URL: 'https://localhost:49209/api',
   
   TIMEOUT: 30000, // 30 segundos
   

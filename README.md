@@ -512,28 +512,3 @@ SMTP_PORT=587
 SMTP_USERNAME=seu-email
 SMTP_PASSWORD=sua-senha
 ```
-
-## 🤝 Contribuindo
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/MinhaFeature`)
-3. Commit suas mudanças (`git commit -m 'Adiciona MinhaFeature'`)
-4. Push para a branch (`git push origin feature/MinhaFeature`)
-5. Abra um Pull Request
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## 👨‍💻 Autor
-
-Desenvolvido com ❤️ para conectar vizinhos e promover economia compartilhada.
-
-## 📞 Suporte
-
-- Email: contato@alugai.com
-- Issues: [GitHub Issues](https://github.com/seu-usuario/alugai-api/issues)
-
----
-
-⭐ Se este projeto foi útil para você, considere dar uma estrela no GitHub!

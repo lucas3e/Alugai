@@ -232,14 +232,3 @@ dotnet clean
 6. ✅ Configure CI/CD
 7. ✅ Faça deploy em produção
 
-## 🆘 Precisa de Ajuda?
-
-- 📖 Leia o [README.md](README.md) completo
-- 🐛 Abra uma [Issue no GitHub](https://github.com/seu-usuario/alugai-api/issues)
-- 📧 Email: contato@alugai.com
-
----
-
-**Pronto!** Sua API está rodando! 🎉
-
-Acesse http://localhost:5000 e comece a testar!

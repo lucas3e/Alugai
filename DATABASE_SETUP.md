@@ -743,21 +743,3 @@ VALUES ('Furadeira Teste', 'Furadeira para testes', 'Ferramentas', 25.00, 'São 
 SELECT * FROM "Usuarios";
 SELECT * FROM "Equipamentos";
 ```
-
----
-
-## 📊 Diagrama ER (Entidade-Relacionamento)
-
-```
-┌─────────────────┐
-│    Usuarios     │
-├─────────────────┤
-│ Id (PK)         │
-│ Nome            │
-│ Email (UNIQUE)  │
-│ SenhaHash       │
-│ Cidade          │
-│ UF              │
-│ FotoPerfil      │
-│ Telefone        │
-│ Ativo           │
