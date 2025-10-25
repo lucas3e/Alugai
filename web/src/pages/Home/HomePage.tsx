@@ -34,7 +34,7 @@ export default function HomePage() {
     try {
       setLoading(true);
       const response = await equipamentoService.list({ busca, categoria });
-      setEquipamentos(response.equipamentos);
+      setEquipamentos(response?.equipamentos ?? []);
     } catch (err: any) {
       setError(err.message || 'Erro ao carregar equipamentos');
     } finally {
