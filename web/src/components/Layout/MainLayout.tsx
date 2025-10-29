@@ -131,7 +131,7 @@ export default function MainLayout() {
       >
         <Container maxWidth="sm">
           <Typography variant="body2" color="text.secondary" align="center">
-            © 2024 Alugai - Aluguel de Equipamentos entre Vizinhos
+            © 2025 Alugai - Aluguel de Equipamentos entre Vizinhos
           </Typography>
         </Container>
       </Box>
