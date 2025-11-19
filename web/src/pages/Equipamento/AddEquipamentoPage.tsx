@@ -166,7 +166,6 @@ export default function AddEquipamentoPage() {
             />
             <TextField
               margin="normal"
-              required
               fullWidth
               id="endereco"
               label="Endereço"

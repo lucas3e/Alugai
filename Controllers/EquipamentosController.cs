@@ -282,12 +282,7 @@ public class EquipamentosController : ControllerBase
                 return Forbid();
             }
 
-            // Deletar imagens
-            if (equipamento.Imagens.Any())
-            {
-                await _storageService.DeleteImagesAsync(equipamento.Imagens);
-            }
-
+            // Não precisa deletar imagens Base64 do storage
             _context.Equipamentos.Remove(equipamento);
             await _context.SaveChangesAsync();
 
@@ -338,16 +333,16 @@ public class EquipamentosController : ControllerBase
                 return BadRequest(new { message = "Nenhuma imagem fornecida" });
             }
 
-            // Upload das imagens
-            var imageUrls = await _storageService.UploadImagesAsync(imagens, "equipamentos");
+            // Converter imagens para Base64
+            var base64Images = await _storageService.ConvertToBase64Async(imagens);
             
-            // Adicionar URLs às imagens do equipamento
-            equipamento.Imagens.AddRange(imageUrls);
+            // Adicionar Base64 às imagens do equipamento
+            equipamento.Imagens.AddRange(base64Images);
             equipamento.DataAtualizacao = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation($"Imagens adicionadas ao equipamento: Id={id}, Quantidade={imageUrls.Count}");
+            _logger.LogInformation($"Imagens adicionadas ao equipamento: Id={id}, Quantidade={base64Images.Count}");
 
             return Ok(new { imagens = equipamento.Imagens });
         }
@@ -372,7 +367,7 @@ public class EquipamentosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RemoverImagem(int id, [FromQuery] string imageUrl)
+    public async Task<IActionResult> RemoverImagem(int id, [FromQuery] string imageBase64)
     {
         try
         {
@@ -393,21 +388,18 @@ public class EquipamentosController : ControllerBase
                 return Forbid();
             }
 
-            if (string.IsNullOrEmpty(imageUrl))
+            if (string.IsNullOrEmpty(imageBase64))
             {
-                return BadRequest(new { message = "URL da imagem não fornecida" });
+                return BadRequest(new { message = "Imagem não fornecida" });
             }
 
-            if (!equipamento.Imagens.Contains(imageUrl))
+            if (!equipamento.Imagens.Contains(imageBase64))
             {
                 return BadRequest(new { message = "Imagem não encontrada no equipamento" });
             }
 
-            // Remover imagem do storage
-            await _storageService.DeleteImageAsync(imageUrl);
-
-            // Remover URL da lista
-            equipamento.Imagens.Remove(imageUrl);
+            // Remover Base64 da lista (não precisa deletar do storage)
+            equipamento.Imagens.Remove(imageBase64);
             equipamento.DataAtualizacao = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();

@@ -15,8 +15,7 @@ import {
 import Grid from '@mui/material/GridLegacy';
 import { aluguelService } from '../../services/aluguel.service';
 import { AlugueisResponse, Aluguel } from '../../types';
-import { useNavigate, useRoutes } from 'react-router-dom';
-import { authService } from 'services/auth.service';
+import { useNavigate } from 'react-router-dom';
 
 export default function MeusAlugueisPage() {
   const navigate = useNavigate();
@@ -32,7 +31,6 @@ export default function MeusAlugueisPage() {
     try {
       setLoading(true);
       setError('');
-      const user = await authService.getProfile()
       const response = await aluguelService.getMeus();
       setAlugueis(response);
     } catch (err: any) {

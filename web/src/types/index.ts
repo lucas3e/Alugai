@@ -107,6 +107,9 @@ export interface CreateEquipamentoRequest {
   descricao: string;
   categoria: string;
   precoPorDia: number;
+  cidade: string;
+  uf: string;
+  endereco?: string;
   imagens?: File[];
 }
 

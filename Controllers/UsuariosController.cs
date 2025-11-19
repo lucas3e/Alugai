@@ -115,23 +115,17 @@ public class UsuariosController : ControllerBase
                 return BadRequest(new { message = "Nenhuma foto fornecida" });
             }
 
-            // Deletar foto antiga se existir
-            if (!string.IsNullOrEmpty(usuario.FotoPerfil))
-            {
-                await _storageService.DeleteImageAsync(usuario.FotoPerfil);
-            }
-
-            // Upload da nova foto
-            var fotoUrl = await _storageService.UploadImageAsync(foto, "perfis");
+            // Converter foto para Base64
+            var fotoBase64 = await _storageService.ConvertToBase64Async(foto);
             
-            usuario.FotoPerfil = fotoUrl;
+            usuario.FotoPerfil = fotoBase64;
             usuario.DataAtualizacao = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 
             _logger.LogInformation($"Foto de perfil atualizada: UserId={userId}");
 
-            return Ok(new { fotoUrl });
+            return Ok(new { fotoPerfil = fotoBase64 });
         }
         catch (ArgumentException ex)
         {
@@ -170,7 +164,7 @@ public class UsuariosController : ControllerBase
 
             if (!string.IsNullOrEmpty(usuario.FotoPerfil))
             {
-                await _storageService.DeleteImageAsync(usuario.FotoPerfil);
+                // Não precisa deletar do storage, apenas limpar o campo
                 usuario.FotoPerfil = null;
                 usuario.DataAtualizacao = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
