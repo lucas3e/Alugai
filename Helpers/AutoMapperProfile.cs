@@ -24,6 +24,8 @@ public class AutoMapperProfile : Profile
         CreateMap<Equipamento, EquipamentoResponse>()
             .ForMember(dest => dest.NomeProprietario, opt => opt.MapFrom(src => src.Usuario!.Nome))
             .ForMember(dest => dest.FotoPerfilProprietario, opt => opt.MapFrom(src => src.Usuario!.FotoPerfil))
+            .ForMember(dest => dest.CidadeProprietario, opt => opt.MapFrom(src => src.Usuario!.Cidade))
+            .ForMember(dest => dest.UFProprietario, opt => opt.MapFrom(src => src.Usuario!.UF))
             .ForMember(dest => dest.MediaAvaliacoes, opt => opt.MapFrom(src =>
                 src.Avaliacoes.Any() ? src.Avaliacoes.Average(a => a.Nota) : (double?)null))
             .ForMember(dest => dest.TotalAvaliacoes, opt => opt.MapFrom(src => src.Avaliacoes.Count));

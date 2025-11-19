@@ -19,12 +19,15 @@ export interface Equipamento {
   descricao: string;
   categoria: string;
   precoPorDia: number;
+  cidade: string;
+  uf: string;
+  endereco: string | null;
   disponivel: boolean;
-  proprietarioId: number;
-  proprietarioNome: string;
-  proprietarioFoto: string | null;
-  proprietarioCidade: string;
-  proprietarioUf: string;
+  usuarioId: number;
+  nomeProprietario: string;
+  fotoPerfilProprietario: string | null;
+  cidadeProprietario: string;
+  ufProprietario: string;
   imagens: string[];
   mediaAvaliacoes: number | null;
   totalAvaliacoes: number;
@@ -148,10 +151,11 @@ export interface AuthResponse {
 }
 
 export interface EquipamentosResponse {
-  equipamentos: Equipamento[];
+  data: Equipamento[];
+  page: number;
+  pageSize: number;
   total: number;
-  pagina: number;
-  totalPaginas: number;
+  totalPages: number;
 }
 
 export interface AlugueisResponse {

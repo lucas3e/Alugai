@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 export default function MeusAlugueisPage() {
   const navigate = useNavigate();
 
-  const [alugueis, setAlugueis] = useState<AlugueisResponse>();
+  const [alugueis, setAlugueis] = useState<Aluguel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [tipo, setTipo] = useState<'locatario' | 'proprietario'>('locatario');
@@ -86,17 +86,17 @@ export default function MeusAlugueisPage() {
         </Box>
       ) : error ? (
         <Alert severity="error">{error}</Alert>
-      ) : alugueis?.alugueis.length === 0 ? (
+      ) : alugueis.length === 0 ? (
         <Typography>Nenhum aluguel encontrado.</Typography>
       ) : (
         <Grid container spacing={2}>
-          {alugueis?.alugueis.map((a) => (
+          {alugueis.map((a: Aluguel) => (
             <Grid item xs={12} sm={6} md={4} key={a.id}>
               <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <CardMedia
                   component="img"
                   height="180"
-                  image={a.equipamentoImagem?.[0] || '/placeholder-image.png'}
+                  image={a.equipamentoImagem || '/placeholder-image.png'}
                   alt={a.equipamentoTitulo}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>

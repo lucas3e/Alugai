@@ -16,6 +16,8 @@ public class EquipamentoResponse
     public int UsuarioId { get; set; }
     public string NomeProprietario { get; set; } = string.Empty;
     public string? FotoPerfilProprietario { get; set; }
+    public string CidadeProprietario { get; set; } = string.Empty;
+    public string UFProprietario { get; set; } = string.Empty;
     public double? MediaAvaliacoes { get; set; }
     public int TotalAvaliacoes { get; set; }
 }

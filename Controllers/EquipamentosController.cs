@@ -114,6 +114,40 @@ public class EquipamentosController : ControllerBase
     }
 
     /// <summary>
+    /// Obter meus equipamentos
+    /// </summary>
+    [HttpGet("meus")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetMeusEquipamentos()
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst("userId")?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized(new { message = "Token inválido" });
+            }
+
+            var equipamentos = await _context.Equipamentos
+                .Include(e => e.Usuario)
+                .Include(e => e.Avaliacoes)
+                .Where(e => e.UsuarioId == userId)
+                .OrderByDescending(e => e.DataCriacao)
+                .ToListAsync();
+
+            var response = _mapper.Map<List<EquipamentoResponse>>(equipamentos);
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao listar meus equipamentos");
+            return StatusCode(500, new { message = "Erro interno do servidor" });
+        }
+    }
+
+    /// <summary>
     /// Obter equipamento por ID
     /// </summary>
     [HttpGet("{id}")]
@@ -341,6 +375,9 @@ public class EquipamentosController : ControllerBase
             equipamento.DataAtualizacao = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+
+            // Recarregar o equipamento para garantir que os dados estão corretos
+            await _context.Entry(equipamento).ReloadAsync();
 
             _logger.LogInformation($"Imagens adicionadas ao equipamento: Id={id}, Quantidade={base64Images.Count}");
 

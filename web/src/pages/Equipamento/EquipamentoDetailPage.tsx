@@ -108,7 +108,7 @@ export default function EquipamentoDetailPage() {
     return <Alert severity="error">{error || 'Equipamento não encontrado'}</Alert>;
   }
 
-  const isProprietario = user?.id === equipamento.proprietarioId;
+  const isProprietario = user?.id === equipamento.usuarioId;
 
   return (
     <Box>
@@ -139,10 +139,10 @@ export default function EquipamentoDetailPage() {
               Categoria: {equipamento.categoria}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Localização: {equipamento.proprietarioCidade}, {equipamento.proprietarioUf}
+              Localização: {equipamento.cidadeProprietario}, {equipamento.ufProprietario}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Proprietário: {equipamento.proprietarioNome}
+              Proprietário: {equipamento.nomeProprietario}
             </Typography>
             {!isProprietario && equipamento.disponivel && (
               <Button

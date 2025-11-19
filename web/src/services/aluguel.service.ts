@@ -19,8 +19,8 @@ class AluguelService {
     );
   }
 
-  async getMeus(): Promise<AlugueisResponse> {
-    return await apiService.get<AlugueisResponse>(
+  async getMeus(): Promise<Aluguel[]> {
+    return await apiService.get<Aluguel[]>(
       API_CONFIG.ENDPOINTS.MEUS_ALUGUEIS
     );
   }
@@ -33,26 +33,30 @@ class AluguelService {
   }
 
   async aprovar(id: number): Promise<Aluguel> {
-    return await apiService.post<Aluguel>(
-      API_CONFIG.ENDPOINTS.APROVAR_ALUGUEL(id)
+    return await apiService.put<Aluguel>(
+      API_CONFIG.ENDPOINTS.APROVAR_ALUGUEL(id),
+      {}
     );
   }
 
   async recusar(id: number): Promise<Aluguel> {
-    return await apiService.post<Aluguel>(
-      API_CONFIG.ENDPOINTS.RECUSAR_ALUGUEL(id)
+    return await apiService.put<Aluguel>(
+      API_CONFIG.ENDPOINTS.RECUSAR_ALUGUEL(id),
+      {}
     );
   }
 
   async cancelar(id: number): Promise<Aluguel> {
-    return await apiService.post<Aluguel>(
-      API_CONFIG.ENDPOINTS.CANCELAR_ALUGUEL(id)
+    return await apiService.put<Aluguel>(
+      API_CONFIG.ENDPOINTS.CANCELAR_ALUGUEL(id),
+      {}
     );
   }
 
   async concluir(id: number): Promise<Aluguel> {
-    return await apiService.post<Aluguel>(
-      API_CONFIG.ENDPOINTS.CONCLUIR_ALUGUEL(id)
+    return await apiService.put<Aluguel>(
+      API_CONFIG.ENDPOINTS.CONCLUIR_ALUGUEL(id),
+      {}
     );
   }
 }

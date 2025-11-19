@@ -34,7 +34,7 @@ export default function HomePage() {
     try {
       setLoading(true);
       const response = await equipamentoService.list({ busca, categoria });
-      setEquipamentos(response?.equipamentos ?? []);
+      setEquipamentos(response?.data ?? []);
     } catch (err: any) {
       setError(err.message || 'Erro ao carregar equipamentos');
     } finally {
@@ -111,7 +111,7 @@ export default function HomePage() {
                     R$ {equipamento.precoPorDia.toFixed(2)}/dia
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
-                    {equipamento.proprietarioCidade}, {equipamento.proprietarioUf}
+                    {equipamento.cidadeProprietario}, {equipamento.ufProprietario}
                   </Typography>
                   <Button
                     fullWidth

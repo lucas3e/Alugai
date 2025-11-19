@@ -17,8 +17,8 @@ export const API_CONFIG = {
     // Aluguéis
     ALUGUEIS: '/alugueis',
     ALUGUEL_BY_ID: (id: number) => `/alugueis/${id}`,
-    MEUS_ALUGUEIS: '/alugueis/meus',
-    APROVAR_ALUGUEL: (id: number) => `/alugueis/${id}/aprovar`,
+    MEUS_ALUGUEIS: '/alugueis',
+    APROVAR_ALUGUEL: (id: number) => `/alugueis/${id}/aceitar`,
     RECUSAR_ALUGUEL: (id: number) => `/alugueis/${id}/recusar`,
     CANCELAR_ALUGUEL: (id: number) => `/alugueis/${id}/cancelar`,
     CONCLUIR_ALUGUEL: (id: number) => `/alugueis/${id}/concluir`,
