@@ -13,6 +13,7 @@ import {
   Tab,
 } from '@mui/material';
 import Grid from '@mui/material/GridLegacy';
+import Payment from '@mui/icons-material/Payment';
 import { aluguelService } from '../../services/aluguel.service';
 import { AlugueisResponse, Aluguel } from '../../types';
 import { useNavigate } from 'react-router-dom';
@@ -127,14 +128,27 @@ export default function MeusAlugueisPage() {
                   )}
                 </CardContent>
 
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 2, gap: 1, flexWrap: 'wrap' }}>
                   <Button
                     variant="outlined"
                     size="small"
-                    onClick={() => navigate(`/alugueis/${a.id}`)}
+                    onClick={() => navigate(`/aluguel/${a.id}`)}
                   >
                     Detalhes
                   </Button>
+
+                  {/* Botão de pagamento para locatário */}
+                  {tipo === 'locatario' && a.status == "Aceito"  && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      startIcon={<Payment />}
+                      onClick={() => navigate(`/pagamento/${a.id}`)}
+                    >
+                      Pagar
+                    </Button>
+                  )}
 
                   {/* Ações do proprietário */}
                   {tipo === 'proprietario' && a.status === 'Pendente' && (

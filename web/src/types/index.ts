@@ -49,7 +49,7 @@ export interface Aluguel {
   dataInicio: string;
   dataFim: string;
   valorTotal: number;
-  status: 'Pendente' | 'Aprovado' | 'Recusado' | 'EmAndamento' | 'Concluido' | 'Cancelado';
+  status: 'Pendente' | 'Aceito' | 'Recusado' | 'EmAndamento' | 'Concluido' | 'Cancelado';
   dataSolicitacao: string;
 }
 
@@ -85,9 +85,12 @@ export interface Transacao {
   id: number;
   aluguelId: number;
   valorPago: number;
-  status: 'Pendente' | 'Aprovado' | 'Recusado' | 'Cancelado';
+  status: 'Pendente' | 'Aceito' | 'Recusado' | 'Cancelado';
   mercadoPagoId: string | null;
+  mercadoPagoPaymentId: string | null;
+  metodoPagamento: string | null;
   dataCriacao: string;
+  dataAtualizacao: string | null;
 }
 
 // DTOs de Request

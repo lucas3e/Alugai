@@ -13,6 +13,7 @@ import MeusEquipamentosPage from '../pages/Equipamento/MeusEquipamentosPage';
 import AddEquipamentoPage from '../pages/Equipamento/AddEquipamentoPage';
 import MeusAlugueisPage from '../pages/Aluguel/MeusAlugueisPage';
 import AluguelDetailPage from '../pages/Aluguel/AluguelDetailPage';
+import PagamentoPage from '../pages/Pagamento/PagamentoPage';
 import PerfilPage from '../pages/Perfil/PerfilPage';
 
 // Layout
@@ -63,6 +64,7 @@ function Routes() {
         <Route path="equipamento/editar/:id" element={<AddEquipamentoPage />} />
         <Route path="meus-alugueis" element={<MeusAlugueisPage />} />
         <Route path="aluguel/:id" element={<AluguelDetailPage />} />
+        <Route path="pagamento/:aluguelId" element={<PagamentoPage />} />
         <Route path="perfil" element={<PerfilPage />} />
       </Route>
 

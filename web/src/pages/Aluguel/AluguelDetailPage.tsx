@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/GridLegacy';
 import ArrowBack from '@mui/icons-material/ArrowBack';
+import Payment from '@mui/icons-material/Payment';
 import { aluguelService } from '../../services/aluguel.service';
 import { Aluguel } from '../../types';
 import { useAuth } from '../../contexts/AuthContext';
@@ -221,7 +222,7 @@ export default function AluguelDetailPage() {
         <Divider sx={{ my: 3 }} />
 
         {/* Ações */}
-        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
           {isProprietario && aluguel.status === 'Pendente' && (
             <>
               <Button
@@ -243,8 +244,20 @@ export default function AluguelDetailPage() {
             </>
           )}
 
+          {isLocatario && aluguel.status == "Aceito" && (
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<Payment />}
+              onClick={() => navigate(`/pagamento/${aluguel.id}`)}
+              size="large"
+            >
+              Realizar Pagamento
+            </Button>
+          )}
+
           {(isLocatario || isProprietario) && 
-           (aluguel.status === 'Pendente' || aluguel.status === 'Aprovado') && (
+           (aluguel.status === 'Pendente' || aluguel.status === 'Aceito') && (
             <Button
               variant="outlined"
               color="error"
