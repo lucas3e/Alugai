@@ -1,0 +1,29 @@
+# Directories
+bin/
+obj/
+logs/
+wwwroot/uploads/
+.vs/
+.vscode/
+
+# Files
+*.user
+*.suo
+*.cache
+*.log
+*.tmp
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+!README.md
+
+# Environment
+.env
+.env.local
+appsettings.Development.json
+appsettings.Production.json.example

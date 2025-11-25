@@ -1,0 +1,77 @@
+services:
+  # PostgreSQL Database (same as production)
+  postgres:
+    image: postgres:16-alpine
+    container_name: alugai-postgres-dev
+    environment:
+      POSTGRES_DB: alugai_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+      - ./database-setup.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - alugai-network-dev
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # API Service (Development mode with hot reload)
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: alugai-api-dev
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=alugai_db;Username=postgres;Password=postgres
+    ports:
+      - "5000:80"
+    volumes:
+      - ./:/app
+      - api_uploads_dev:/app/wwwroot/uploads
+      - api_logs_dev:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - alugai-network-dev
+    restart: unless-stopped
+
+  # Web Service (Development mode - using npm start)
+  web:
+    image: node:18-alpine
+    container_name: alugai-web-dev
+    working_dir: /app
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000/api
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm start"
+    depends_on:
+      - api
+    networks:
+      - alugai-network-dev
+    stdin_open: true
+    tty: true
+
+networks:
+  alugai-network-dev:
+    driver: bridge
+
+volumes:
+  postgres_data_dev:
+    driver: local
+  api_uploads_dev:
+    driver: local
+  api_logs_dev:
+    driver: local

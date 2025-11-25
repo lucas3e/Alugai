@@ -1,0 +1,71 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: alugai-postgres
+    environment:
+      POSTGRES_DB: alugai_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database-setup.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - alugai-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # API Service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: alugai-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=alugai_db;Username=postgres;Password=postgres
+    ports:
+      - "5000:80"
+    volumes:
+      - api_uploads:/app/wwwroot/uploads
+      - api_logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - alugai-network
+    restart: unless-stopped
+
+  # Web Service
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=http://localhost:5000/api
+    container_name: alugai-web
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - alugai-network
+    restart: unless-stopped
+
+networks:
+  alugai-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  api_uploads:
+    driver: local
+  api_logs:
+    driver: local

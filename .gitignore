@@ -391,3 +391,20 @@ logs/
 *.db
 *.db-shm
 *.db-wal
+
+# Docker
+.env
+.env.local
+docker-compose.override.yml
+*.log
+
+# Frontend (React)
+web/node_modules/
+web/build/
+web/.env.local
+web/.env.development.local
+web/.env.test.local
+web/.env.production.local
+web/npm-debug.log*
+web/yarn-debug.log*
+web/yarn-error.log*

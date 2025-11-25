@@ -65,44 +65,100 @@ O **Alugai** é uma plataforma que conecta vizinhos para aluguel de equipamentos
 
 ## 📋 Pré-requisitos
 
-Antes de começar, você precisará ter instalado em sua máquina:
+### Opção 1: Executar com Docker (Recomendado) 🐳
+
+A maneira mais fácil de executar o projeto é usando Docker:
+
+- **[Docker](https://docs.docker.com/get-docker/)** 20.10 ou superior
+- **[Docker Compose](https://docs.docker.com/compose/install/)** 2.0 ou superior
+
+```bash
+# Verificar instalações
+docker --version
+docker-compose --version
+```
+
+### Opção 2: Executar Localmente
+
+Se preferir executar sem Docker, você precisará:
 
 - **[.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)** ou superior
 - **[PostgreSQL 14+](https://www.postgresql.org/download/)** 
+- **[Node.js 18+](https://nodejs.org/)** (para o frontend)
 - **[Git](https://git-scm.com/downloads)**
 - Um editor de código (recomendado: [Visual Studio 2022](https://visualstudio.microsoft.com/) ou [VS Code](https://code.visualstudio.com/))
 
-### Verificar instalações:
-
 ```bash
-# Verificar .NET
+# Verificar instalações
 dotnet --version
-
-# Verificar PostgreSQL
 psql --version
-
-# Verificar Git
+node --version
 git --version
 ```
 
 ## 🔧 Instalação e Configuração
 
-### 1. Clone o repositório
+### 🐳 Opção 1: Usando Docker (Recomendado)
+
+Esta é a maneira mais rápida de começar! O Docker irá configurar automaticamente o banco de dados, API e frontend.
+
+#### 1. Clone o repositório
 
 ```bash
 git clone https://github.com/lucas3e/alugai-api.git
 cd alugai-api
 ```
 
-### 2. Instalar dependências
+#### 2. Execute com Docker Compose
+
+```bash
+# Modo produção (build otimizado)
+docker-compose up -d
+
+# OU modo desenvolvimento (com hot reload)
+docker-compose -f docker-compose.dev.yml up -d
+```
+
+#### 3. Acesse as aplicações
+
+- **Frontend (Web)**: http://localhost:3000
+- **Backend (API)**: http://localhost:5000
+- **Swagger (Documentação)**: http://localhost:5000/swagger
+- **PostgreSQL**: localhost:5432
+
+#### 4. Parar os containers
+
+```bash
+docker-compose down
+
+# Para remover também os dados do banco
+docker-compose down -v
+```
+
+**📖 Para mais detalhes sobre Docker, consulte o [Guia Docker Completo](DOCKER.md)**
+
+---
+
+### 💻 Opção 2: Instalação Local (Sem Docker)
+
+Se preferir executar sem Docker, siga os passos abaixo:
+
+#### 1. Clone o repositório
+
+```bash
+git clone https://github.com/lucas3e/alugai-api.git
+cd alugai-api
+```
+
+#### 2. Instalar dependências da API
 
 ```bash
 dotnet restore
 ```
 
-### 3. Configurar o Banco de Dados PostgreSQL
+#### 3. Configurar o Banco de Dados PostgreSQL
 
-#### Opção A: Usando PostgreSQL local
+##### Opção A: Usando PostgreSQL local
 
 1. Crie um banco de dados:
 
@@ -117,13 +173,13 @@ CREATE USER alugai_user WITH PASSWORD 'sua_senha_segura';
 GRANT ALL PRIVILEGES ON DATABASE alugai_db TO alugai_user;
 ```
 
-#### Opção B: Usando Docker
+##### Opção B: Usando Docker apenas para PostgreSQL
 
 ```bash
 docker run --name postgres-alugai -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=alugai_db -p 5432:5432 -d postgres:14
 ```
 
-### 4. Configurar variáveis de ambiente
+#### 4. Configurar variáveis de ambiente
 
 Edite o arquivo `appsettings.json` ou `appsettings.Development.json`:
 
@@ -146,7 +202,7 @@ Edite o arquivo `appsettings.json` ou `appsettings.Development.json`:
 - Nunca commite senhas ou chaves secretas no Git
 - Use variáveis de ambiente em produção
 
-### 5. Executar Migrations
+#### 5. Executar Migrations
 
 ```bash
 # Criar a migration inicial
@@ -162,17 +218,24 @@ Se você não tiver o `dotnet-ef` instalado:
 dotnet tool install --global dotnet-ef
 ```
 
-## ▶️ Executando o Projeto
-
-### Modo Desenvolvimento
+#### 6. Instalar dependências do Frontend
 
 ```bash
-dotnet run
+cd web
+npm install
 ```
 
-Ou com hot reload:
+## ▶️ Executando o Projeto Localmente
+
+### Executar a API
+
+Em um terminal, na raiz do projeto:
 
 ```bash
+# Modo desenvolvimento
+dotnet run
+
+# Ou com hot reload
 dotnet watch run
 ```
 
@@ -181,10 +244,28 @@ A API estará disponível em:
 - **HTTPS**: `https://localhost:5001`
 - **Swagger**: `http://localhost:5000` ou `https://localhost:5001`
 
+### Executar o Frontend
+
+Em outro terminal, na pasta `web`:
+
+```bash
+cd web
+npm start
+```
+
+O frontend estará disponível em:
+- **Web**: `http://localhost:3000`
+
 ### Modo Produção
 
 ```bash
+# API
 dotnet run --configuration Release
+
+# Frontend
+cd web
+npm run build
+# Servir com um servidor web (nginx, serve, etc.)
 ```
 
 ## 📁 Estrutura do Projeto
