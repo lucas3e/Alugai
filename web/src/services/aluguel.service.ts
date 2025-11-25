@@ -19,11 +19,10 @@ class AluguelService {
     );
   }
 
-  async getMeus(): Promise<Aluguel[]> {
-    return await apiService.get<Aluguel[]>(
-      API_CONFIG.ENDPOINTS.MEUS_ALUGUEIS
-    );
-  }
+getMeus(tipo: "locatario" | "proprietario"): Promise<Aluguel[]> {
+    return apiService.get(`${API_CONFIG.ENDPOINTS.MEUS_ALUGUEIS}?tipo=${tipo}`);
+}
+
 
   async create(data: CreateAluguelRequest): Promise<Aluguel> {
     return await apiService.post<Aluguel>(

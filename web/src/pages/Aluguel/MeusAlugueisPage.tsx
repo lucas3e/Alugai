@@ -31,7 +31,7 @@ export default function MeusAlugueisPage() {
     try {
       setLoading(true);
       setError('');
-      const response = await aluguelService.getMeus();
+      const response = await aluguelService.getMeus(tipo);
       setAlugueis(response);
     } catch (err: any) {
       console.error(err);

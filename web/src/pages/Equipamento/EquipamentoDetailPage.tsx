@@ -80,10 +80,14 @@ export default function EquipamentoDetailPage() {
 
     try {
       setSolicitando(true);
+      // Converter datas para formato ISO completo
+      const dataInicioISO = new Date(dataInicio + 'T00:00:00').toISOString();
+      const dataFimISO = new Date(dataFim + 'T23:59:59').toISOString();
+      
       await aluguelService.create({
         equipamentoId: Number(id),
-        dataInicio,
-        dataFim,
+        dataInicio: dataInicioISO,
+        dataFim: dataFimISO,
       });
       
       alert('Solicitação de aluguel enviada com sucesso!');

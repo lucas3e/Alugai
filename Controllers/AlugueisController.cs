@@ -253,7 +253,7 @@ public class AlugueisController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> AceitarAluguel(int id, [FromBody] string? observacao)
+    public async Task<IActionResult> AceitarAluguel(int id)
     {
         try
         {
@@ -286,7 +286,7 @@ public class AlugueisController : ControllerBase
 
             aluguel.Status = "Aceito";
             aluguel.DataResposta = DateTime.UtcNow;
-            aluguel.ObservacaoProprietario = observacao;
+            aluguel.ObservacaoProprietario = null;
 
             await _context.SaveChangesAsync();
 
