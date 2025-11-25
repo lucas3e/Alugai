@@ -47,17 +47,6 @@ O **Alugai** é uma plataforma que conecta vizinhos para aluguel de equipamentos
 - ✅ Cálculo automático de valores
 - ✅ Controle de status do aluguel
 
-### 💬 Comunicação
-- ✅ Chat entre locador e locatário
-- ✅ Histórico de mensagens
-- ✅ Notificação de mensagens não lidas
-
-### 🌟 Avaliações
-- ✅ Avaliação de equipamentos
-- ✅ Avaliação de usuários
-- ✅ Cálculo de média de avaliações
-- ✅ Comentários
-
 ### 💰 Pagamentos
 - ✅ Integração com Mercado Pago (preparado)
 - ✅ Webhook para notificações
