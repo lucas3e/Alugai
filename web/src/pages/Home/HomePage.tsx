@@ -97,7 +97,7 @@ export default function HomePage() {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={equipamento.imagens[0] || '/placeholder.png'}
+                  image={equipamento.imagem || '/placeholder.png'}
                   alt={equipamento.titulo}
                 />
                 <CardContent>

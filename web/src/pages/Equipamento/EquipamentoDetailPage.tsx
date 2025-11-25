@@ -120,7 +120,7 @@ export default function EquipamentoDetailPage() {
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <img
-              src={equipamento.imagens[0] || '/placeholder.png'}
+              src={equipamento.imagem || '/placeholder.png'}
               alt={equipamento.titulo}
               style={{ width: '100%', borderRadius: 8 }}
             />

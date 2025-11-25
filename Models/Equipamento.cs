@@ -35,7 +35,7 @@ public class Equipamento
     [MaxLength(200)]
     public string? Endereco { get; set; }
 
-    public List<string> Imagens { get; set; } = new List<string>();
+    public string? Imagem { get; set; }
 
     public bool Disponivel { get; set; } = true;
 

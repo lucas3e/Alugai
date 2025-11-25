@@ -10,7 +10,7 @@ public class EquipamentoResponse
     public string Cidade { get; set; } = string.Empty;
     public string UF { get; set; } = string.Empty;
     public string? Endereco { get; set; }
-    public List<string> Imagens { get; set; } = new List<string>();
+    public string? Imagem { get; set; }
     public bool Disponivel { get; set; }
     public DateTime DataCriacao { get; set; }
     public int UsuarioId { get; set; }

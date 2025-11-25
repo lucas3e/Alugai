@@ -36,7 +36,7 @@ public class AutoMapperProfile : Profile
 
         CreateMap<Aluguel, AluguelResponse>()
             .ForMember(dest => dest.TituloEquipamento, opt => opt.MapFrom(src => src.Equipamento!.Titulo))
-            .ForMember(dest => dest.ImagensEquipamento, opt => opt.MapFrom(src => src.Equipamento!.Imagens))
+            .ForMember(dest => dest.ImagemEquipamento, opt => opt.MapFrom(src => src.Equipamento!.Imagem))
             .ForMember(dest => dest.NomeLocatario, opt => opt.MapFrom(src => src.Locatario!.Nome))
             .ForMember(dest => dest.FotoPerfilLocatario, opt => opt.MapFrom(src => src.Locatario!.FotoPerfil))
             .ForMember(dest => dest.ProprietarioId, opt => opt.MapFrom(src => src.Equipamento!.UsuarioId))

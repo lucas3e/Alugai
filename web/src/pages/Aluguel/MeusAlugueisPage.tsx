@@ -96,7 +96,7 @@ export default function MeusAlugueisPage() {
                 <CardMedia
                   component="img"
                   height="180"
-                  image={a.equipamentoImagem || '/placeholder-image.png'}
+                  image={a.imagemEquipamento || '/placeholder-image.png'}
                   alt={a.equipamentoTitulo}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>

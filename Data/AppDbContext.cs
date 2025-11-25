@@ -37,12 +37,6 @@ public class AppDbContext : DbContext
                 .HasForeignKey(e => e.UsuarioId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.Property(e => e.Imagens)
-                .HasConversion(
-                    v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions)null),
-                    v => System.Text.Json.JsonSerializer.Deserialize<List<string>>(v, (System.Text.Json.JsonSerializerOptions)null) ?? new List<string>()
-                );
-
             entity.HasIndex(e => e.Categoria);
             entity.HasIndex(e => new { e.Cidade, e.UF });
         });

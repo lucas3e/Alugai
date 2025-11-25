@@ -332,16 +332,16 @@ public class EquipamentosController : ControllerBase
     }
 
     /// <summary>
-    /// Upload de imagens do equipamento
+    /// Upload de imagem do equipamento (substitui a imagem existente)
     /// </summary>
-    [HttpPost("{id}/imagens")]
+    [HttpPost("{id}/imagem")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UploadImagens(int id, [FromForm] List<IFormFile> imagens)
+    public async Task<IActionResult> UploadImagem(int id, [FromForm] IFormFile imagem)
     {
         try
         {
@@ -362,26 +362,23 @@ public class EquipamentosController : ControllerBase
                 return Forbid();
             }
 
-            if (imagens == null || !imagens.Any())
+            if (imagem == null)
             {
                 return BadRequest(new { message = "Nenhuma imagem fornecida" });
             }
 
-            // Converter imagens para Base64
-            var base64Images = await _storageService.ConvertToBase64Async(imagens);
+            // Converter imagem para Base64
+            var base64Image = await _storageService.ConvertToBase64Async(imagem);
             
-            // Adicionar Base64 às imagens do equipamento
-            equipamento.Imagens.AddRange(base64Images);
+            // Substituir a imagem do equipamento
+            equipamento.Imagem = base64Image;
             equipamento.DataAtualizacao = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 
-            // Recarregar o equipamento para garantir que os dados estão corretos
-            await _context.Entry(equipamento).ReloadAsync();
+            _logger.LogInformation($"Imagem atualizada no equipamento: Id={id}");
 
-            _logger.LogInformation($"Imagens adicionadas ao equipamento: Id={id}, Quantidade={base64Images.Count}");
-
-            return Ok(new { imagens = equipamento.Imagens });
+            return Ok(new { imagem = equipamento.Imagem });
         }
         catch (ArgumentException ex)
         {
@@ -389,7 +386,7 @@ public class EquipamentosController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Erro ao fazer upload de imagens do equipamento {id}");
+            _logger.LogError(ex, $"Erro ao fazer upload de imagem do equipamento {id}");
             return StatusCode(500, new { message = "Erro interno do servidor" });
         }
     }
@@ -397,14 +394,13 @@ public class EquipamentosController : ControllerBase
     /// <summary>
     /// Remover imagem do equipamento
     /// </summary>
-    [HttpDelete("{id}/imagens")]
+    [HttpDelete("{id}/imagem")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RemoverImagem(int id, [FromQuery] string imageBase64)
+    public async Task<IActionResult> RemoverImagem(int id)
     {
         try
         {
@@ -425,25 +421,15 @@ public class EquipamentosController : ControllerBase
                 return Forbid();
             }
 
-            if (string.IsNullOrEmpty(imageBase64))
-            {
-                return BadRequest(new { message = "Imagem não fornecida" });
-            }
-
-            if (!equipamento.Imagens.Contains(imageBase64))
-            {
-                return BadRequest(new { message = "Imagem não encontrada no equipamento" });
-            }
-
-            // Remover Base64 da lista (não precisa deletar do storage)
-            equipamento.Imagens.Remove(imageBase64);
+            // Remover a imagem
+            equipamento.Imagem = null;
             equipamento.DataAtualizacao = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 
             _logger.LogInformation($"Imagem removida do equipamento: Id={id}");
 
-            return Ok(new { imagens = equipamento.Imagens });
+            return Ok(new { message = "Imagem removida com sucesso" });
         }
         catch (Exception ex)
         {

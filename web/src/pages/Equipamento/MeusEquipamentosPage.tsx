@@ -105,11 +105,7 @@ export default function MeusEquipamentosPage() {
                 <CardMedia
                   component="img"
                   height="180"
-                  image={
-                    equip.imagens?.length
-                      ? equip.imagens[0]
-                      : '/placeholder-image.png'
-                  }
+                  image={equip.imagem || '/placeholder-image.png'}
                   alt={equip.titulo}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>

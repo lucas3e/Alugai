@@ -5,7 +5,7 @@ public class AluguelResponse
     public int Id { get; set; }
     public int EquipamentoId { get; set; }
     public string TituloEquipamento { get; set; } = string.Empty;
-    public List<string> ImagensEquipamento { get; set; } = new List<string>();
+    public string? ImagemEquipamento { get; set; }
     public int LocatarioId { get; set; }
     public string NomeLocatario { get; set; } = string.Empty;
     public string? FotoPerfilLocatario { get; set; }

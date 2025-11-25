@@ -28,7 +28,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { equipamentoService } from '../../services/equipamento.service';
 import { CATEGORIAS_EQUIPAMENTOS, ESTADOS_BRASILEIROS } from '../../types';
 
-const steps = ['Informações Básicas', 'Localização', 'Imagens', 'Revisão'];
+const steps = ['Informações Básicas', 'Localização', 'Imagem', 'Revisão'];
 
 export default function AddEquipamentoPage() {
   const navigate = useNavigate();
@@ -43,8 +43,8 @@ export default function AddEquipamentoPage() {
     uf: '',
     endereco: '',
   });
-  const [imagens, setImagens] = useState<File[]>([]);
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [imagem, setImagem] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -54,24 +54,22 @@ export default function AddEquipamentoPage() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
-      setImagens([...imagens, ...files]);
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setImagem(file);
 
-      // Criar previews
-      files.forEach((file) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreviews((prev) => [...prev, reader.result as string]);
-        };
-        reader.readAsDataURL(file);
-      });
+      // Criar preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleRemoveImage = (index: number) => {
-    setImagens(imagens.filter((_, i) => i !== index));
-    setImagePreviews(imagePreviews.filter((_, i) => i !== index));
+  const handleRemoveImage = () => {
+    setImagem(null);
+    setImagePreview('');
   };
 
   const handleNext = () => {
@@ -88,11 +86,16 @@ export default function AddEquipamentoPage() {
     setLoading(true);
 
     try {
-      await equipamentoService.create({
+      // Criar equipamento
+      const equipamento = await equipamentoService.create({
         ...formData,
         precoPorDia: parseFloat(formData.precoPorDia),
-        imagens,
       });
+
+      // Se houver imagem, fazer upload
+      if (imagem) {
+        await equipamentoService.uploadImagem(equipamento.id, imagem);
+      }
 
       setSuccess('Equipamento cadastrado com sucesso!');
       setTimeout(() => navigate('/meus-equipamentos'), 2000);
@@ -111,7 +114,7 @@ export default function AddEquipamentoPage() {
       case 1:
         return formData.cidade && formData.uf;
       case 2:
-        return imagens.length > 0;
+        return imagem !== null;
       default:
         return true;
     }
@@ -248,71 +251,76 @@ export default function AddEquipamentoPage() {
         return (
           <Box>
             <Typography variant="h6" gutterBottom sx={{ color: 'primary.main', fontWeight: 600 }}>
-              Fotos do Equipamento
+              Foto do Equipamento
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              Adicione fotos de qualidade para atrair mais locatários. Máximo 5MB por imagem.
+              Adicione uma foto de qualidade para atrair mais locatários. Máximo 5MB.
             </Typography>
 
-            <Button
-              variant="outlined"
-              component="label"
-              fullWidth
-              startIcon={<CloudUploadIcon />}
-              sx={{
-                py: 2,
-                mb: 3,
-                borderStyle: 'dashed',
-                borderWidth: 2,
-                '&:hover': {
+            {!imagePreview ? (
+              <Button
+                variant="outlined"
+                component="label"
+                fullWidth
+                startIcon={<CloudUploadIcon />}
+                sx={{
+                  py: 2,
+                  mb: 3,
                   borderStyle: 'dashed',
                   borderWidth: 2,
-                },
-              }}
-            >
-              Selecionar Imagens
-              <input
-                type="file"
-                hidden
-                multiple
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-            </Button>
-
-            {imagePreviews.length > 0 && (
-              <Grid container spacing={2}>
-                {imagePreviews.map((preview, index) => (
-                  <Grid item xs={6} sm={4} md={3} key={index}>
-                    <Card sx={{ position: 'relative' }}>
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image={preview}
-                        alt={`Preview ${index + 1}`}
-                      />
-                      <IconButton
-                        sx={{
-                          position: 'absolute',
-                          top: 5,
-                          right: 5,
-                          bgcolor: 'rgba(255, 255, 255, 0.9)',
-                          '&:hover': { bgcolor: 'rgba(255, 255, 255, 1)' },
-                        }}
-                        size="small"
-                        onClick={() => handleRemoveImage(index)}
-                      >
-                        <DeleteIcon fontSize="small" color="error" />
-                      </IconButton>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
+                  '&:hover': {
+                    borderStyle: 'dashed',
+                    borderWidth: 2,
+                  },
+                }}
+              >
+                Selecionar Imagem
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </Button>
+            ) : (
+              <Box sx={{ position: 'relative', maxWidth: 400, mx: 'auto' }}>
+                <Card>
+                  <CardMedia
+                    component="img"
+                    height="300"
+                    image={imagePreview}
+                    alt="Preview"
+                  />
+                </Card>
+                <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
+                  <Button
+                    variant="outlined"
+                    component="label"
+                    fullWidth
+                    startIcon={<CloudUploadIcon />}
+                  >
+                    Trocar Imagem
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                  </Button>
+                  <IconButton
+                    color="error"
+                    onClick={handleRemoveImage}
+                    sx={{ border: 1, borderColor: 'error.main' }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              </Box>
             )}
 
-            {imagePreviews.length === 0 && (
+            {!imagePreview && (
               <Alert severity="info">
-                Nenhuma imagem selecionada. Adicione pelo menos uma foto do equipamento.
+                Nenhuma imagem selecionada. Adicione uma foto do equipamento.
               </Alert>
             )}
           </Box>
@@ -353,21 +361,19 @@ export default function AddEquipamentoPage() {
 
             <Paper variant="outlined" sx={{ p: 2 }}>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                IMAGENS ({imagePreviews.length})
+                IMAGEM
               </Typography>
-              <Grid container spacing={1}>
-                {imagePreviews.slice(0, 4).map((preview, index) => (
-                  <Grid item xs={3} key={index}>
-                    <CardMedia
-                      component="img"
-                      height="80"
-                      image={preview}
-                      alt={`Preview ${index + 1}`}
-                      sx={{ borderRadius: 1 }}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
+              {imagePreview && (
+                <Box sx={{ maxWidth: 200 }}>
+                  <CardMedia
+                    component="img"
+                    height="150"
+                    image={imagePreview}
+                    alt="Preview"
+                    sx={{ borderRadius: 1 }}
+                  />
+                </Box>
+              )}
             </Paper>
 
             {success && (

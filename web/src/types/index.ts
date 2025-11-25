@@ -28,7 +28,7 @@ export interface Equipamento {
   fotoPerfilProprietario: string | null;
   cidadeProprietario: string;
   ufProprietario: string;
-  imagens: string[];
+  imagem: string | null;
   mediaAvaliacoes: number | null;
   totalAvaliacoes: number;
   dataCriacao: string;
@@ -39,7 +39,7 @@ export interface Aluguel {
   id: number;
   equipamentoId: number;
   equipamentoTitulo: string;
-  equipamentoImagem: string | null;
+  imagemEquipamento: string | null;
   locatarioId: number;
   locatarioNome: string;
   locatarioFoto: string | null;
@@ -113,7 +113,6 @@ export interface CreateEquipamentoRequest {
   cidade: string;
   uf: string;
   endereco?: string;
-  imagens?: File[];
 }
 
 export interface UpdateEquipamentoRequest {

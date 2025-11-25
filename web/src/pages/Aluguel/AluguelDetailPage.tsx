@@ -156,12 +156,12 @@ export default function AluguelDetailPage() {
             <Typography variant="h6" gutterBottom>
               Equipamento
             </Typography>
-            {aluguel.equipamentoImagem && (
+            {aluguel.imagemEquipamento && (
               <Card sx={{ mb: 2 }}>
                 <CardMedia
                   component="img"
                   height="200"
-                  image={aluguel.equipamentoImagem}
+                  image={aluguel.imagemEquipamento}
                   alt={aluguel.equipamentoTitulo}
                 />
               </Card>
