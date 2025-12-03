@@ -6,4 +6,5 @@ public interface IEmailService
     Task SendAluguelSolicitadoEmailAsync(string emailProprietario, string nomeProprietario, string tituloEquipamento, string nomeLocatario);
     Task SendAluguelAceitoEmailAsync(string emailLocatario, string nomeLocatario, string tituloEquipamento);
     Task SendAluguelRecusadoEmailAsync(string emailLocatario, string nomeLocatario, string tituloEquipamento);
+    Task SendAluguelConcluidoEmailAsync(string emailLocatario, string nomeLocatario, string tituloEquipamento);
 }

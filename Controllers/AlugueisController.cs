@@ -479,4 +479,71 @@ public class AlugueisController : ControllerBase
             return StatusCode(500, new { message = "Erro interno do servidor" });
         }
     }
+
+    /// <summary>
+    /// Confirmar devolução do equipamento (marca aluguel como concluído e equipamento como disponível)
+    /// </summary>
+    [HttpPut("{id}/confirmar-devolucao")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ConfirmarDevolucao(int id)
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst("userId")?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized(new { message = "Token inválido" });
+            }
+
+            var aluguel = await _context.Alugueis
+                .Include(a => a.Equipamento)
+                .Include(a => a.Locatario)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (aluguel == null)
+            {
+                return NotFound(new { message = "Aluguel não encontrado" });
+            }
+
+            // Apenas o proprietário pode confirmar a devolução
+            if (aluguel.Equipamento!.UsuarioId != userId)
+            {
+                return Forbid();
+            }
+
+            if (aluguel.Status != "EmAndamento")
+            {
+                return BadRequest(new { message = "Apenas aluguéis em andamento podem ter devolução confirmada" });
+            }
+
+            // Atualizar status do aluguel
+            aluguel.Status = "Concluido";
+
+            // Marcar equipamento como disponível novamente
+            aluguel.Equipamento.Disponivel = true;
+            aluguel.Equipamento.DataAtualizacao = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            // Enviar email para o locatário
+            await _emailService.SendAluguelConcluidoEmailAsync(
+                aluguel.Locatario!.Email,
+                aluguel.Locatario.Nome,
+                aluguel.Equipamento.Titulo);
+
+            _logger.LogInformation($"Devolução confirmada: AluguelId={id}, EquipamentoId={aluguel.EquipamentoId}");
+
+            var response = _mapper.Map<AluguelResponse>(aluguel);
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Erro ao confirmar devolução do aluguel {id}");
+            return StatusCode(500, new { message = "Erro interno do servidor" });
+        }
+    }
 }

@@ -58,6 +58,13 @@ getMeus(tipo: "locatario" | "proprietario"): Promise<Aluguel[]> {
       {}
     );
   }
+
+  async confirmarDevolucao(id: number): Promise<Aluguel> {
+    return await apiService.put<Aluguel>(
+      API_CONFIG.ENDPOINTS.CONFIRMAR_DEVOLUCAO(id),
+      {}
+    );
+  }
 }
 
 export const aluguelService = new AluguelService();

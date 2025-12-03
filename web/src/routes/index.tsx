@@ -15,6 +15,10 @@ import MeusAlugueisPage from '../pages/Aluguel/MeusAlugueisPage';
 import AluguelDetailPage from '../pages/Aluguel/AluguelDetailPage';
 import PagamentoPage from '../pages/Pagamento/PagamentoPage';
 import PerfilPage from '../pages/Perfil/PerfilPage';
+import MensagensPage from '../pages/Mensagem/MensagensPage';
+import ConversaPage from '../pages/Mensagem/ConversaPage';
+import AvaliacoesPage from '../pages/Avaliacao/AvaliacoesPage';
+import TransacoesPage from '../pages/Transacao/TransacoesPage';
 
 // Layout
 import MainLayout from '../components/Layout/MainLayout';
@@ -65,6 +69,10 @@ function Routes() {
         <Route path="meus-alugueis" element={<MeusAlugueisPage />} />
         <Route path="aluguel/:id" element={<AluguelDetailPage />} />
         <Route path="pagamento/:aluguelId" element={<PagamentoPage />} />
+        <Route path="mensagens" element={<MensagensPage />} />
+        <Route path="mensagens/:aluguelId" element={<ConversaPage />} />
+        <Route path="avaliacoes" element={<AvaliacoesPage />} />
+        <Route path="transacoes" element={<TransacoesPage />} />
         <Route path="perfil" element={<PerfilPage />} />
       </Route>
 

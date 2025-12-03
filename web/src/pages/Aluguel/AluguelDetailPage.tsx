@@ -15,6 +15,9 @@ import {
 import Grid from '@mui/material/GridLegacy';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Payment from '@mui/icons-material/Payment';
+import MessageIcon from '@mui/icons-material/Message';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import StarIcon from '@mui/icons-material/Star';
 import { aluguelService } from '../../services/aluguel.service';
 import { Aluguel } from '../../types';
 import { useAuth } from '../../contexts/AuthContext';
@@ -83,6 +86,23 @@ export default function AluguelDetailPage() {
       alert('Aluguel cancelado');
     } catch (err: any) {
       alert(err.message || 'Erro ao cancelar aluguel');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleConfirmarDevolucao = async () => {
+    if (!window.confirm('Confirmar que o equipamento foi devolvido?')) {
+      return;
+    }
+    
+    try {
+      setActionLoading(true);
+      await aluguelService.confirmarDevolucao(Number(id));
+      await loadAluguel();
+      alert('Devolução confirmada! O equipamento está disponível novamente.');
+    } catch (err: any) {
+      alert(err.message || 'Erro ao confirmar devolução');
     } finally {
       setActionLoading(false);
     }
@@ -223,6 +243,19 @@ export default function AluguelDetailPage() {
 
         {/* Ações */}
         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+          {/* Mensagens - disponível para aceito, em andamento e concluído */}
+          {(isLocatario || isProprietario) && 
+           (aluguel.status === 'Aceito' || aluguel.status === 'EmAndamento' || aluguel.status === 'Concluido') && (
+            <Button
+              variant="outlined"
+              startIcon={<MessageIcon />}
+              onClick={() => navigate(`/mensagens/${aluguel.id}`)}
+            >
+              Mensagens
+            </Button>
+          )}
+
+          {/* Aprovar/Recusar - apenas proprietário quando pendente */}
           {isProprietario && aluguel.status === 'Pendente' && (
             <>
               <Button
@@ -244,7 +277,8 @@ export default function AluguelDetailPage() {
             </>
           )}
 
-          {isLocatario && aluguel.status == "Aceito" && (
+          {/* Pagamento - apenas locatário quando aceito */}
+          {isLocatario && aluguel.status === "Aceito" && (
             <Button
               variant="contained"
               color="primary"
@@ -256,6 +290,32 @@ export default function AluguelDetailPage() {
             </Button>
           )}
 
+          {/* Confirmar Devolução - apenas proprietário quando em andamento */}
+          {isProprietario && aluguel.status === 'EmAndamento' && (
+            <Button
+              variant="contained"
+              color="success"
+              startIcon={<CheckCircleIcon />}
+              onClick={handleConfirmarDevolucao}
+              disabled={actionLoading}
+            >
+              Confirmar Devolução
+            </Button>
+          )}
+
+          {/* Avaliar - quando concluído */}
+          {aluguel.status === 'Concluido' && (
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<StarIcon />}
+              onClick={() => navigate('/avaliacoes')}
+            >
+              Avaliar
+            </Button>
+          )}
+
+          {/* Cancelar - ambos podem cancelar quando pendente ou aceito */}
           {(isLocatario || isProprietario) && 
            (aluguel.status === 'Pendente' || aluguel.status === 'Aceito') && (
             <Button

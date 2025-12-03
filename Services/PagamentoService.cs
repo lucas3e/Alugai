@@ -134,13 +134,24 @@ public class PagamentoService : IPagamentoService
 
             transacao.DataAtualizacao = DateTime.UtcNow;
 
-            // Se o pagamento foi aprovado, atualizar status do aluguel
+            // Se o pagamento foi aprovado, atualizar status do aluguel e equipamento
             if (transacao.Status == "Aprovado" && statusAnterior != "Aprovado")
             {
                 var aluguel = transacao.Aluguel;
                 if (aluguel != null)
                 {
                     aluguel.Status = "EmAndamento";
+                    
+                    // Atualizar status do equipamento para indisponível
+                    var equipamento = await _context.Equipamentos
+                        .FirstOrDefaultAsync(e => e.Id == aluguel.EquipamentoId);
+                    
+                    if (equipamento != null)
+                    {
+                        equipamento.Disponivel = false;
+                        equipamento.DataAtualizacao = DateTime.UtcNow;
+                        _logger.LogInformation($"Equipamento {equipamento.Id} marcado como indisponível após pagamento aprovado");
+                    }
                 }
             }
 

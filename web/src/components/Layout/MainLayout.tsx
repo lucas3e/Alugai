@@ -10,14 +10,19 @@ import {
   Menu,
   MenuItem,
   Container,
+  Badge,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import HomeIcon from '@mui/icons-material/Home';
 import BuildIcon from '@mui/icons-material/Build';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import MessageIcon from '@mui/icons-material/Message';
+import StarIcon from '@mui/icons-material/Star';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 
 import { useAuth } from '../../contexts/AuthContext';
+import { mensagemService } from '../../services/mensagem.service';
 
 export default function MainLayout() {
   const navigate = useNavigate();
@@ -72,6 +77,27 @@ export default function MainLayout() {
               onClick={() => navigate('/meus-alugueis')}
             >
               Meus Aluguéis
+            </Button>
+            <Button
+              color="inherit"
+              startIcon={<MessageIcon />}
+              onClick={() => navigate('/mensagens')}
+            >
+              Mensagens
+            </Button>
+            <Button
+              color="inherit"
+              startIcon={<StarIcon />}
+              onClick={() => navigate('/avaliacoes')}
+            >
+              Avaliações
+            </Button>
+            <Button
+              color="inherit"
+              startIcon={<ReceiptIcon />}
+              onClick={() => navigate('/transacoes')}
+            >
+              Transações
             </Button>
           </Box>
 

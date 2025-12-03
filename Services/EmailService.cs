@@ -115,4 +115,23 @@ public class EmailService : IEmailService
 
         await SendEmailAsync(emailLocatario, subject, body);
     }
+
+    public async Task SendAluguelConcluidoEmailAsync(string emailLocatario, string nomeLocatario, string tituloEquipamento)
+    {
+        var subject = "Aluguel concluído - Alugai";
+        var body = $@"
+            <html>
+            <body>
+                <h2>Olá, {nomeLocatario}!</h2>
+                <p>O aluguel do equipamento <strong>{tituloEquipamento}</strong> foi concluído com sucesso!</p>
+                <p>O proprietário confirmou o recebimento do equipamento.</p>
+                <p>Agradecemos por usar a plataforma Alugai. Não se esqueça de avaliar sua experiência!</p>
+                <br>
+                <p>Atenciosamente,<br>Equipe Alugai</p>
+            </body>
+            </html>
+        ";
+
+        await SendEmailAsync(emailLocatario, subject, body);
+    }
 }
